@@ -11,7 +11,7 @@ func main() {
 	inputFile, _ := os.Open("input.txt")
 	input := bufio.NewScanner(inputFile)
 
-	maxId := int64(0)
+	var seats []int64
 
 	for input.Scan() {
 		line := input.Bytes()
@@ -28,11 +28,29 @@ func main() {
 		}
 
 		seatId := row*8 + col
-		if seatId > maxId {
-			maxId = seatId
-		}
+		seats = append(seats, seatId)
+	}
 
-		fmt.Println(maxId)
+	for _, seat := range seats {
+		for _, otherSeat := range seats {
+			var potentialSeat int64
+
+			if seat+2 == otherSeat {
+				potentialSeat = seat + 1
+				foundSeat := false
+
+				for _, notMySeat := range seats {
+					if notMySeat == potentialSeat {
+						foundSeat = true
+						break
+					}
+				}
+
+				if !foundSeat {
+					fmt.Println(potentialSeat)
+				}
+			}
+		}
 	}
 }
 
